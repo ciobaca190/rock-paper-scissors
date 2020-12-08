@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Rock Paper Scissors Game</title>
+	</head>
+	<body>
+		<script>
+			function isEqual(str1, str2) {
+				return str1.toUpperCase() === str2.toUpperCase();
+			}
+
+			function computerPlay() {
+				let selections = ["Rock", "Paper", "Scissors"];
+				return selections[Math.floor(Math.random() * selections.length)];
+			}
+
+			function playRound(playerSelection, computerSelection) {
+				if (isEqual(playerSelection, computerSelection)) {
+					return "Tie!";
+				} else {
+					if (isEqual(playerSelection, "rock")) {
+						if(isEqual(computerSelection, "scissors")) return "You Won! Rock beats Scissors";
+						else return "You Lose! Paper beats Rock";
+					} else if (isEqual(playerSelection, "paper")) {
+						if (isEqual(computerSelection, "rock")) return "You Won! Paper beats Rock";
+						else return "You Lose! Scissors beats Paper";
+					} else {
+						if (isEqual(computerSelection, "paper")) return "You Won! Scissors beats Paper";
+						else return "You Lose! Rock beats Scissors";
+					}
+				}
+			}
+
+			function game() {
+				const rounds = 5;
+				let score = 0;
+				for(let i = 0; i < rounds; i++) {
+					const playerSelection = prompt("Enter your selection: ", "rock");
+					const computerSelection = computerPlay();
+					let result = playRound(playerSelection, computerSelection);
+					console.log(result);
+					if(result.indexOf("Won!") !== -1) score++;
+				}
+				if(score > (rounds)/2) console.log("You won against the computer!");
+				else console.log("You lost against the computer!");
+				console.log(`Score: ${score}`);
+			}
+		</script>
+	</body>
+</html>
