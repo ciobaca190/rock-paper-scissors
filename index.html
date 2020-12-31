@@ -6,17 +6,35 @@
 		<title>Rock Paper Scissors Game</title>
 	</head>
 	<body>
+		<div id="player">
+			<button>Rock</button>
+			<button>Paper</button>
+			<button>Scissors</button>
+		</div>
+
+		<div id="results">
+			<h2 id="score">Score: 0-0</h2>
+		</div>
 		<script>
+			const buttons = document.querySelectorAll("#player button");
+			const results = document.querySelector("#results");
+			const rounds = 5;
+
+			let score = document.querySelector("#score");
+			let playerScore = 0;
+			let computerScore = 0;
+
 			function isEqual(str1, str2) {
 				return str1.toUpperCase() === str2.toUpperCase();
 			}
 
 			function computerPlay() {
-				let selections = ["Rock", "Paper", "Scissors"];
+				const selections = ["Rock", "Paper", "Scissors"];
 				return selections[Math.floor(Math.random() * selections.length)];
 			}
 
-			function playRound(playerSelection, computerSelection) {
+			function playRound(playerSelection) {
+				const computerSelection = computerPlay();
 				if (isEqual(playerSelection, computerSelection)) {
 					return "Tie!";
 				} else {
@@ -33,20 +51,48 @@
 				}
 			}
 
-			function game() {
-				const rounds = 5;
-				let score = 0;
-				for(let i = 0; i < rounds; i++) {
-					const playerSelection = prompt("Enter your selection: ", "rock");
-					const computerSelection = computerPlay();
-					let result = playRound(playerSelection, computerSelection);
-					console.log(result);
-					if(result.indexOf("Won!") !== -1) score++;
-				}
-				if(score > (rounds)/2) console.log("You won against the computer!");
-				else console.log("You lost against the computer!");
-				console.log(`Score: ${score}`);
+			function updateScore() {
+				score.textContent = `Score: ${playerScore}-${computerScore}`;
 			}
+
+			function handleButton(event) {
+				let para = document.createElement("p");
+				let roundResult = playRound(event.target.textContent);
+				para.textContent = roundResult;
+				results.appendChild(para);
+
+				if(roundResult.indexOf("Won!") !== -1) playerScore++;
+				else if(roundResult.indexOf("Lose!") !== -1) computerScore++;
+				updateScore();
+
+				if(playerScore === rounds) {
+					playerScore = 0;
+					computerScore = 0;
+
+					results.innerHTML = "<h2 id='score'>Score: 0-0</h2>";
+					score = document.querySelector("#score");
+
+					roundResult = "Congratulations! You won the game.";
+					para.textContent = roundResult;
+					results.appendChild(para);
+				}
+
+				else if(computerScore === rounds) {
+					playerScore = 0;
+					computerScore = 0;
+
+					results.innerHTML = "<h2 id='score'>Score: 0-0</h2>";
+					score = document.querySelector("#score");
+
+					roundResult = "You lost! The computer beat you.";
+					para.textContent = roundResult;
+					results.appendChild(para);
+				}
+			}
+
+			buttons.forEach( button => {
+				button.addEventListener("click", handleButton);
+			});
 		</script>
 	</body>
 </html>
